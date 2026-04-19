@@ -1,6 +1,16 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "main": "src/server.ts",
+  "scripts": {
+  "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+},
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.4.1"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.0"
   }
 }
