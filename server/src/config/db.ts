@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+// חיבור למסד הנתונים של MongoDB באמצעות Mongoose
 export const connectDB = async () => {
   try {
     const mongoUri = process.env.MONGO_URI;

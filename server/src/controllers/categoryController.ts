@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Category from "../models/Category";
-
+// פונקציה לקבלת כל הקטגוריות מהמסד נתונים
 export const getAllCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find();
@@ -10,7 +10,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
   }
 };
 
-
+// פונקציה לקבלת קטגוריה ספציפית לפי מזהה מהמסד נתונים
 export const getCategoryById = async (req: Request, res: Response) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -21,7 +21,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+// פונקציה ליצירת קטגוריה חדשה במסד נתונים
 export const createCategory = async (req: Request, res: Response) => {
   try {
     const category = await Category.create(req.body);
@@ -31,6 +31,7 @@ export const createCategory = async (req: Request, res: Response) => {
   }
 };
 
+// פונקציה לעדכון קטגוריה במסד נתונים לפי מזהה
 export const updateCategory = async (req: Request, res: Response) => {
   try {
     const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
@@ -43,7 +44,7 @@ export const updateCategory = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+// פונקציה למחיקת קטגוריה קיימת במסד נתונים לפי מזהה
 export const deleteCategory = async (req: Request, res: Response) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
