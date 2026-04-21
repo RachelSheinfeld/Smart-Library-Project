@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Borrow from "../models/Borrow";
-import Book from "../models/Book";
 
 export const getAllBorrows = async (req: Request, res: Response) => {
     try {
@@ -30,16 +29,25 @@ export const borrowBook = async (req: Request, res: Response) => {
     const unavailableUntil = await isBookAvailable(book);
 
     if (unavailableUntil) {
+      const now = new Date();
+      const diffTime = unavailableUntil.getTime() - now.getTime();
+      const daysUntilAvailable = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
       return res.status(400).json({
         message: "Book is not available",
-        availableAt: unavailableUntil
+        isAvailable: false,
+        availableAt: unavailableUntil,
+        daysUntilAvailable: daysUntilAvailable > 0 ? daysUntilAvailable : 0
       });
     }
 
-   
-    const borrow = await Borrow.create({user, book,dueDate });
+    const borrow = await Borrow.create({ user, book, dueDate });
 
-    res.status(201).json(borrow);
+    res.status(201).json({
+      message: "Book borrowed successfully",
+      isAvailable: false,
+      borrow
+    });
   } catch {
     res.status(500).json({ message: "Server error" });
   }
