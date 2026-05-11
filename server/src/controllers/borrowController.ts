@@ -18,6 +18,7 @@ export const getAllBorrows = async (req: Request, res: Response) => {
 const isBookAvailable = async (bookId: string) => {
   const activeBorrow = await Borrow.findOne({
     book: bookId,
+    returned: { $ne: true },
     dueDate: { $gt: new Date() }
   });
 
@@ -46,7 +47,7 @@ export const borrowBook = async (req: Request, res: Response) => {
       });
     }
     // יצירת השאלה חדשה במסד נתונים
-    const borrow = await Borrow.create({ user, book, dueDate });
+    const borrow = await Borrow.create({ user, book, dueDate, returned: false });
 
     res.status(201).json({
       message: "Book borrowed successfully",
@@ -64,7 +65,8 @@ export const returnBook = async (req: Request, res: Response) => {
 
     if (!borrow)
       return res.status(404).json({ message: "Borrow not found" });
-    // עדכון תאריך ההחזרה לשעת החזרה נוכחית
+    // עדכון סטטוס ההחזרה ותאריך ההחזרה לשעת החזרה נוכחית
+    borrow.returned = true;
     borrow.dueDate = new Date();
     // שמירת העדכון במסד נתונים 
     await borrow.save();
@@ -78,9 +80,12 @@ export const returnBook = async (req: Request, res: Response) => {
 //  כולל פרטי הספר והמשתמש, מהמסד נתונים
 export const getUserBorrows = async (req: Request, res: Response) => {
   try {
-    const borrows = await Borrow.find({ user: req.params.userId })
+    const borrows = await Borrow.find({
+      user: req.params.userId,
+      returned: { $ne: true },
+      dueDate: { $gt: new Date() },
+    })
       //populate מביא את פרטי הספר והמשתמש
-
       .populate("book")
       .populate("user");
 

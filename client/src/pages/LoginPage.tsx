@@ -3,15 +3,6 @@ import type { FormEventHandler } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { login } from '../api/authApi'
 import { useAuth } from '../context/AuthContext'
-import {
-  Alert,
-  Box,
-  Button,
-  Link,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material'
 
 const LoginPage = () => {
   // שימוש ב-useNavigate כדי לנווט לדף הבית
@@ -44,45 +35,47 @@ const LoginPage = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
-      <Paper sx={{ width: '100%', maxWidth: 420, p: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Login Page
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2 }}>
-          <TextField
-            id="email"
-            label="Email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-          <TextField
-            id="password"
-            label="Password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-          <Button type="submit" variant="contained">
+    <div className="flex-center mt-6">
+      <div className="paper" style={{ width: '100%', maxWidth: 420 }}>
+        <h1>Login Page</h1>
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">
             Login
-          </Button>
-        </Box>
-        <Typography variant="body2" sx={{ mt: 2 }}>
+          </button>
+        </form>
+        <p className="mt-2">
           Need an account?{' '}
-          <Link component={RouterLink} to="/register">
+          <RouterLink to="/register">
             Register
-          </Link>
-        </Typography>
+          </RouterLink>
+        </p>
         {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
+          <div className="alert alert-error mt-2">
             {error}
-          </Alert>
+          </div>
         )}
-      </Paper>
-    </Box>
+      </div>
+    </div>
   )
 }
 

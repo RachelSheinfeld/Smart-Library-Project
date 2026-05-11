@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);

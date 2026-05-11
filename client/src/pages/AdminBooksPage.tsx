@@ -2,16 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { getBooks, deleteBook } from '../api/booksApi'
 import type { Book } from '../types/book'
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CircularProgress,
-  Typography,
-} from '@mui/material'
 
 const AdminBooksPage = () => {
   const [books, setBooks] = useState<Book[]>([])
@@ -46,49 +36,41 @@ const AdminBooksPage = () => {
   }
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">
-          Admin Books Page
-        </Typography>
-        <Button variant="contained" component={RouterLink} to="/admin/books/new">
+    <div>
+      <div className="flex-between mb-3">
+        <h1>Admin Books Page</h1>
+        <RouterLink to="/admin/books/new" className="button">
           Add Book
-        </Button>
-      </Box>
+        </RouterLink>
+      </div>
 
-      {loading && <CircularProgress />}
-      {error && <Alert severity="error">{error}</Alert>}
+      {loading && <div className="spinner"></div>}
+      {error && <div className="alert alert-error">{error}</div>}
 
       {!loading && !error && (
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 2,
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          }}
-        >
+        <div className="grid">
           {books.map((book) => (
-            <Card key={book._id}>
-              <CardContent>
-                <Typography variant="h6">{book.title}</Typography>
-                <Typography color="text.secondary">{book.author}</Typography>
-                <Typography variant="body2" sx={{ mt: 1 }}>
+            <article key={book._id} className="card">
+              <div className="card-content">
+                <h3 className="card-title">{book.title}</h3>
+                <p className="card-subtitle">{book.author}</p>
+                <p className="card-text">
                   {book.description || 'No description'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button component={RouterLink} to={`/admin/books/${book._id}/edit`} size="small">
+                </p>
+              </div>
+              <div className="card-actions">
+                <RouterLink to={`/admin/books/${book._id}/edit`} className="button" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
                   Edit
-                </Button>
-                <Button color="error" size="small" onClick={() => void handleDelete(book._id)}>
+                </RouterLink>
+                <button className="button error" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }} onClick={() => void handleDelete(book._id)}>
                   Delete
-                </Button>
-              </CardActions>
-            </Card>
+                </button>
+              </div>
+            </article>
           ))}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   )
 }
 

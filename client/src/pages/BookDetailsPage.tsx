@@ -5,16 +5,6 @@ import { getBookById } from '../api/booksApi'
 import { borrowBook } from '../api/borrowApi'
 import { useAuth } from '../context/AuthContext'
 import type { Book } from '../types/book'
-import {
-  Alert,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  CircularProgress,
-  Stack,
-  Typography,
-} from '@mui/material'
 
 const BookDetailsPage = () => {
   const { id } = useParams()
@@ -74,42 +64,36 @@ const BookDetailsPage = () => {
   }
 
   const categoryName = typeof book?.category === 'string' ? book?.category : book?.category?.name ?? 'Unknown'
-  const borrowSeverity = borrowMessage.includes('הושאל') ? 'success' : 'warning'
+  const borrowSeverity = borrowMessage.includes('הושאל') ? 'alert-success' : 'alert-warning'
 
   return (
     <>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Book Details
-      </Typography>
-      {loading && <CircularProgress />}
-      {error && <Alert severity="error">{error}</Alert>}
+      <h1>Book Details</h1>
+      {loading && <div className="spinner"></div>}
+      {error && <div className="alert alert-error">{error}</div>}
       {!loading && !error && book && (
-        <Card>
-          {book.imageUrl && <CardMedia component="img" height="280" image={book.imageUrl} alt={book.title} />}
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              {book.title}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-              {book.author}
-            </Typography>
-            <Typography variant="body1" component="p" sx={{ mb: 2 }}>
+        <article className="card">
+          {book.imageUrl && <img src={book.imageUrl} alt={book.title} className="card-image" style={{ maxHeight: 280 }} />}
+          <div className="card-content">
+            <h2 className="card-title">{book.title}</h2>
+            <p className="card-subtitle">{book.author}</p>
+            <p className="card-text">
               {book.description || 'No description'}
-            </Typography>
-            <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-              <Typography variant="body2">Year: {book.publishedYear ?? 'Unknown'}</Typography>
-              <Typography variant="body2">Category: {categoryName}</Typography>
-            </Stack>
-            <Button variant="contained" onClick={() => void handleBorrow()}>
+            </p>
+            <div className="flex gap-2 mb-3">
+              <span className="chip">Year: {book.publishedYear ?? 'Unknown'}</span>
+              <span className="chip">Category: {categoryName}</span>
+            </div>
+            <button onClick={() => void handleBorrow()} className="button">
               Borrow this book
-            </Button>
+            </button>
             {borrowMessage && (
-              <Alert severity={borrowSeverity} sx={{ mt: 2 }}>
+              <div className={`alert ${borrowSeverity} mt-2`}>
                 {borrowMessage}
-              </Alert>
+              </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </article>
       )}
     </>
   )

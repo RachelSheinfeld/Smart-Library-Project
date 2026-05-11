@@ -10,13 +10,19 @@ export interface BookPayload {
   category: string
 }
 
-export const getBooks = async () => {
-  const { data } = await apiClient.get<Book[]>('/books')
+export const getBooks = async (categoryId?: string) => {
+  const query = categoryId ? `?category=${encodeURIComponent(categoryId)}` : ''
+  const { data } = await apiClient.get<Book[]>(`/books${query}`)
   return data
 }
 
 export const getBookById = async (id: string) => {
   const { data } = await apiClient.get<Book>(`/books/${id}`)
+  return data
+}
+
+export const getBooksByCategory = async (categoryId: string) => {
+  const { data } = await apiClient.get<Book[]>(`/books?category=${encodeURIComponent(categoryId)}`)
   return data
 }
 

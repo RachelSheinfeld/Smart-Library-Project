@@ -1,47 +1,44 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { register } from '../api/authApi'
+import type { FormEventHandler } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { login } from '../api/authApi'
+import { useAuth } from '../context/AuthContext'
 
-const RegisterPage = () => {
+const AdminLoginPage = () => {
   const navigate = useNavigate()
-  const [fullName, setFullName] = useState('')
+  const { setAuth } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
     setError('')
 
     try {
-      await register({ fullName, email, password })
-      navigate('/login')
+      const response = await login({ email, password })
+      if (!response.token) {
+        setError('Missing token from server')
+        return
+      }
+
+      setAuth(response.user, response.token)
+      navigate('/admin/books')
     } catch {
-      setError('Registration failed. Try another email.')
+      setError('Admin login failed. Check the admin credentials.')
     }
   }
 
   return (
     <div className="flex-center mt-6">
       <div className="paper" style={{ width: '100%', maxWidth: 420 }}>
-        <h1>Register Page</h1>
+        <h1>כניסה כמנהל</h1>
         <form onSubmit={handleSubmit} className="form">
           <div className="form-group">
-            <label htmlFor="fullName">Full name</label>
-            <input
-              id="fullName"
-              type="text"
-              value={fullName}
-              onChange={(event) => setFullName(event.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">שם משתמש</label>
             <input
               id="email"
-              type="email"
+              type="text"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               required
@@ -57,16 +54,8 @@ const RegisterPage = () => {
               required
             />
           </div>
-          <button type="submit">
-            Register
-          </button>
+          <button type="submit">התחבר כמנהל</button>
         </form>
-        <p className="mt-2">
-          Already have an account?{' '}
-          <RouterLink to="/login">
-            Login
-          </RouterLink>
-        </p>
         {error && (
           <div className="alert alert-error mt-2">
             {error}
@@ -77,4 +66,4 @@ const RegisterPage = () => {
   )
 }
 
-export default RegisterPage
+export default AdminLoginPage

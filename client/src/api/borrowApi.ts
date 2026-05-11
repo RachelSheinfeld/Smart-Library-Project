@@ -12,6 +12,6 @@ export const borrowBook = async (payload: { user: string; book: string; dueDate:
 }
 
 export const returnBook = async (borrowId: string) => {
-  const { data } = await apiClient.put(`/borrow/return/${borrowId}`)
+  const { data } = await apiClient.put(`/borrow/return/${borrowId}`, {})
   return data
 }

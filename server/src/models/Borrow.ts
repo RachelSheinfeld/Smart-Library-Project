@@ -19,7 +19,11 @@ const borrowSchema = new mongoose.Schema(
     dueDate: {
       type: Date,
       required: true,
-    }
+    },
+    returned: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

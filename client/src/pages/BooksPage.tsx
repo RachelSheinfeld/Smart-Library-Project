@@ -1,48 +1,67 @@
 import { useEffect, useState } from 'react'
-import { Box, Typography, CircularProgress, Alert } from '@mui/material'
 import { getBooks } from '../api/booksApi'
+import { getCategories } from '../api/categoriesApi'
 import BookCard from '../components/BookCard'
 import type { Book } from '../types/book'
+import type { Category } from '../types/category'
 
 const BooksPage = () => {
   const [books, setBooks] = useState<Book[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategory, setSelectedCategory] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    const loadBooks = async () => {
+    const loadAll = async () => {
+      setLoading(true)
+      setError('')
+
       try {
-        const data = await getBooks()
-        setBooks(data)
+        const [categoriesData, booksData] = await Promise.all([
+          getCategories(),
+          getBooks(selectedCategory || undefined),
+        ])
+        setCategories(categoriesData)
+        setBooks(booksData)
       } catch {
-        setError('Failed to load books')
+        setError('Failed to load books or categories')
       } finally {
         setLoading(false)
       }
     }
 
-    void loadBooks()
-  }, [])
+    void loadAll()
+  }, [selectedCategory])
 
   return (
     <>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Books Page
-      </Typography>
-      {loading && <CircularProgress />}
-      {error && <Alert severity="error">{error}</Alert>}
+      <div className="flex-between mb-6" style={{ flexWrap: 'wrap', gap: '1rem' }}>
+        <h1>Books Page</h1>
+        <div className="form-group" style={{ minWidth: 220 }}>
+          <label htmlFor="category-filter">סינון לפי קטגוריה</label>
+          <select
+            id="category-filter"
+            value={selectedCategory}
+            onChange={(event) => setSelectedCategory(event.target.value)}
+          >
+            <option value="">כל הקטגוריות</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {loading && <div className="spinner"></div>}
+      {error && <div className="alert alert-error">{error}</div>}
       {!loading && !error && (
-        <Box
-          sx={{
-            display: 'grid',
-            gap: 2,
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          }}
-        >
+        <div className="grid">
           {books.map((book) => (
             <BookCard key={book._id} book={book} />
           ))}
-        </Box>
+        </div>
       )}
     </>
   )
