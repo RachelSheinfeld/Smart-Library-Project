@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
+import { Box, CircularProgress, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography, Alert } from '@mui/material'
+import type { SelectChangeEvent } from '@mui/material'
 import { getBooks } from '../api/booksApi'
 import { getCategories } from '../api/categoriesApi'
 import BookCard from '../components/BookCard'
@@ -22,7 +24,12 @@ const BooksPage = () => {
           getCategories(),
           getBooks(selectedCategory || undefined),
         ])
-        setCategories(categoriesData)
+        const activeCategoryIds = new Set(
+          booksData
+            .map((book) => (typeof book.category === 'string' ? book.category : book.category?._id))
+            .filter(Boolean),
+        )
+        setCategories(categoriesData.filter((category) => activeCategoryIds.has(category._id)))
         setBooks(booksData)
       } catch {
         setError('Failed to load books or categories')
@@ -35,35 +42,47 @@ const BooksPage = () => {
   }, [selectedCategory])
 
   return (
-    <>
-      <div className="flex-between mb-6" style={{ flexWrap: 'wrap', gap: '1rem' }}>
-        <h1>Books Page</h1>
-        <div className="form-group" style={{ minWidth: 220 }}>
-          <label htmlFor="category-filter">סינון לפי קטגוריה</label>
-          <select
-            id="category-filter"
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 2, mb: 3 }}>
+        <Typography variant="h4">Books Page</Typography>
+        <FormControl sx={{ minWidth: 220 }}>
+          <InputLabel id="category-filter-label">קטגוריה</InputLabel>
+          <Select
+            labelId="category-filter-label"
             value={selectedCategory}
-            onChange={(event) => setSelectedCategory(event.target.value)}
+            label="קטגוריה"
+            onChange={(event: SelectChangeEvent) => setSelectedCategory(event.target.value)}
           >
-            <option value="">כל הקטגוריות</option>
+            <MenuItem value="">כל הקטגוריות</MenuItem>
             {categories.map((category) => (
-              <option key={category._id} value={category._id}>
+              <MenuItem key={category._id} value={category._id}>
                 {category.name}
-              </option>
+              </MenuItem>
             ))}
-          </select>
-        </div>
-      </div>
-      {loading && <div className="spinner"></div>}
-      {error && <div className="alert alert-error">{error}</div>}
-      {!loading && !error && (
-        <div className="grid">
-          {books.map((book) => (
-            <BookCard key={book._id} book={book} />
-          ))}
-        </div>
+          </Select>
+        </FormControl>
+      </Box>
+
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <CircularProgress />
+        </Box>
       )}
-    </>
+
+      {error && <Alert severity="error">{error}</Alert>}
+
+      {!loading && !error && books.length === 0 && <Alert severity="info">לא נמצאו ספרים.</Alert>}
+
+      {!loading && !error && books.length > 0 && (
+        <Grid container spacing={3}>
+          {books.map((book) => (
+            <Grid item xs={12} sm={6} md={4} key={book._id}>
+              <BookCard book={book} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Container>
   )
 }
 

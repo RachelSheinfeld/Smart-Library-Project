@@ -3,6 +3,7 @@ import type { FormEventHandler } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { login } from '../api/authApi'
 import { useAuth } from '../context/AuthContext'
+import { Box, Button, Container, Paper, TextField, Typography, Alert, Link } from '@mui/material'
 
 const LoginPage = () => {
   // שימוש ב-useNavigate כדי לנווט לדף הבית
@@ -35,47 +36,45 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="flex-center mt-6">
-      <div className="paper" style={{ width: '100%', maxWidth: 420 }}>
-        <h1>Login Page</h1>
-        <form onSubmit={handleSubmit} className="form">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">
+    <Container maxWidth="sm" sx={{ py: 8 }}>
+      <Paper sx={{ p: 4, borderRadius: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Login
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2, mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+          <Button type="submit" variant="contained" size="large">
             Login
-          </button>
-        </form>
-        <p className="mt-2">
+          </Button>
+        </Box>
+        <Typography variant="body2" sx={{ mt: 2 }}>
           Need an account?{' '}
-          <RouterLink to="/register">
+          <Link component={RouterLink} to="/register" underline="hover">
             Register
-          </RouterLink>
-        </p>
-        {error && (
-          <div className="alert alert-error mt-2">
+          </Link>
+        </Typography>
+        {error ? (
+          <Alert severity="error" sx={{ mt: 2 }}>
             {error}
-          </div>
-        )}
-      </div>
-    </div>
+          </Alert>
+        ) : null}
+      </Paper>
+    </Container>
   )
 }
 

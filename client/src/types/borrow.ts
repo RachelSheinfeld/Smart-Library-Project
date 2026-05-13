@@ -7,4 +7,5 @@ export interface Borrow {
   book: string | Book
   borrowDate: string
   dueDate: string
+  returned: boolean
 }

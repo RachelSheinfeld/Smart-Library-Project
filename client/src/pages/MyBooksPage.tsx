@@ -1,4 +1,19 @@
 import { useEffect, useState } from 'react'
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Typography,
+  CircularProgress,
+} from '@mui/material'
 import { getUserBorrows, returnBook } from '../api/borrowApi'
 import { useAuth } from '../context/AuthContext'
 import type { Borrow } from '../types/borrow'
@@ -56,61 +71,70 @@ const MyBooksPage = () => {
   }
 
   return (
-    <div>
-      {showPopup && soonBorrows.length > 0 && (
-        <div className="alert-popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="alert-popup" onClick={(event) => event.stopPropagation()}>
-            <h2>התראה: החזרה מתקרבת</h2>
-            <p>יש {soonBorrows.length} ספר{soonBorrows.length === 1 ? '' : 'ים'} שיש להחזיר בתוך שבוע.</p>
-            <ul>
-              {soonBorrows.map((borrow) => {
-                const book = typeof borrow.book === 'string' ? null : borrow.book
-                return (
-                  <li key={borrow._id}>
-                    {book ? book.title : 'ספר'} - תאריך החזרה: {new Date(borrow.dueDate).toLocaleDateString('he-IL')}
-                  </li>
-                )
-              })}
-            </ul>
-            <button className="button" onClick={() => setShowPopup(false)}>
-              סגור
-            </button>
-          </div>
-        </div>
-      )}
-      <h1>My Books Page</h1>
-
-      {!user && <div className="alert alert-info">צריך להתחבר כדי לראות את הספרים שלך.</div>}
-      {loading && <div className="spinner"></div>}
-      {error && <div className="alert alert-error">{error}</div>}
-      {!loading && user && borrows.length === 0 && <div className="alert alert-info">אין השאלות כרגע.</div>}
-
-      {!loading && borrows.length > 0 && (
-        <div className="paper">
-          <div className="list">
-            {borrows.map((borrow) => {
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
+        <DialogTitle>התראה: החזרה מתקרבת</DialogTitle>
+        <DialogContent>
+          <Typography>
+            יש {soonBorrows.length} ספר{soonBorrows.length === 1 ? '' : 'ים'} שיש להחזיר בתוך שבוע.
+          </Typography>
+          <Box component="ul" sx={{ pl: 3, mt: 2 }}>
+            {soonBorrows.map((borrow) => {
               const book = typeof borrow.book === 'string' ? null : borrow.book
               return (
-                <div key={borrow._id} className="list-item">
-                  <div>
-                    <p className="card-title" style={{ margin: 0 }}>
-                      {book ? book.title : 'Book'}
-                    </p>
-                    {book && <p className="card-subtitle" style={{ margin: 0 }}>{book.author}</p>}
-                    <p className="card-text" style={{ margin: '0.75rem 0 0 0' }}>
-                      Return by: {new Date(borrow.dueDate).toLocaleDateString('he-IL')}
-                    </p>
-                  </div>
-                  <button className="button" onClick={() => void handleReturn(borrow._id)}>
-                    Return
-                  </button>
-                </div>
+                <li key={borrow._id}>
+                  {book ? book.title : 'ספר'} - תאריך החזרה: {new Date(borrow.dueDate).toLocaleDateString('he-IL')}
+                </li>
               )
             })}
-          </div>
-        </div>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowPopup(false)}>סגור</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Typography variant="h4" component="h1" gutterBottom>
+        My Books Page
+      </Typography>
+
+      {!user && <Alert severity="info">צריך להתחבר כדי לראות את הספרים שלך.</Alert>}
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <CircularProgress />
+        </Box>
       )}
-    </div>
+      {error && <Alert severity="error">{error}</Alert>}
+      {!loading && user && borrows.length === 0 && <Alert severity="info">אין השאלות כרגע.</Alert>}
+
+      {!loading && borrows.length > 0 && (
+        <Grid container spacing={3} sx={{ mt: 2 }}>
+          {borrows.map((borrow) => {
+            const book = typeof borrow.book === 'string' ? null : borrow.book
+            return (
+              <Grid item xs={12} md={6} key={borrow._id}>
+                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <CardContent>
+                    <Typography variant="h6">{book ? book.title : 'Book'}</Typography>
+                    {book && (
+                      <Typography variant="body2" color="text.secondary">
+                        {book.author}
+                      </Typography>
+                    )}
+                    <Typography sx={{ mt: 1 }}>Return by: {new Date(borrow.dueDate).toLocaleDateString('he-IL')}</Typography>
+                  </CardContent>
+                  <Box sx={{ p: 2, pt: 0 }}>
+                    <Button fullWidth variant="contained" onClick={() => void handleReturn(borrow._id)}>
+                      Return
+                    </Button>
+                  </Box>
+                </Card>
+              </Grid>
+            )
+          })}
+        </Grid>
+      )}
+    </Container>
   )
 }
 

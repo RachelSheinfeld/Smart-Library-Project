@@ -1,6 +1,19 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { isAxiosError } from 'axios'
 import { useParams } from 'react-router-dom'
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Chip,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { getBookById } from '../api/booksApi'
 import { borrowBook } from '../api/borrowApi'
 import { useAuth } from '../context/AuthContext'
@@ -64,38 +77,57 @@ const BookDetailsPage = () => {
   }
 
   const categoryName = typeof book?.category === 'string' ? book?.category : book?.category?.name ?? 'Unknown'
-  const borrowSeverity = borrowMessage.includes('הושאל') ? 'alert-success' : 'alert-warning'
 
   return (
-    <>
-      <h1>Book Details</h1>
-      {loading && <div className="spinner"></div>}
-      {error && <div className="alert alert-error">{error}</div>}
-      {!loading && !error && book && (
-        <article className="card">
-          {book.imageUrl && <img src={book.imageUrl} alt={book.title} className="card-image" style={{ maxHeight: 280 }} />}
-          <div className="card-content">
-            <h2 className="card-title">{book.title}</h2>
-            <p className="card-subtitle">{book.author}</p>
-            <p className="card-text">
-              {book.description || 'No description'}
-            </p>
-            <div className="flex gap-2 mb-3">
-              <span className="chip">Year: {book.publishedYear ?? 'Unknown'}</span>
-              <span className="chip">Category: {categoryName}</span>
-            </div>
-            <button onClick={() => void handleBorrow()} className="button">
-              Borrow this book
-            </button>
-            {borrowMessage && (
-              <div className={`alert ${borrowSeverity} mt-2`}>
-                {borrowMessage}
-              </div>
-            )}
-          </div>
-        </article>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Book Details
+      </Typography>
+
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <CircularProgress />
+        </Box>
       )}
-    </>
+
+      {error && <Alert severity="error">{error}</Alert>}
+
+      {!loading && !error && book && (
+        <Card sx={{ boxShadow: 4 }}>
+          {book.imageUrl && (
+            <CardMedia
+              component="img"
+              image={book.imageUrl}
+              alt={book.title}
+              sx={{ height: 360, objectFit: 'cover' }}
+            />
+          )}
+          <CardContent>
+            <Stack spacing={2}>
+              <Typography variant="h5" component="h2">
+                {book.title}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary">
+                {book.author}
+              </Typography>
+              <Typography>{book.description || 'No description'}</Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap">
+                <Chip label={`Year: ${book.publishedYear ?? 'Unknown'}`} />
+                <Chip label={`Category: ${categoryName}`} variant="outlined" />
+              </Stack>
+              <Button variant="contained" size="large" onClick={handleBorrow}>
+                Borrow this book
+              </Button>
+              {borrowMessage && (
+                <Alert severity={borrowMessage.includes('הושאל') ? 'success' : 'warning'}>
+                  {borrowMessage}
+                </Alert>
+              )}
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
+    </Container>
   )
 }
 

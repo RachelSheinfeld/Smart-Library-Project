@@ -1,5 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Card,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+  Alert,
+  CircularProgress,
+} from '@mui/material'
 import { getBookById, updateBook, type BookPayload } from '../api/booksApi'
 import { getCategories } from '../api/categoriesApi'
 import type { Category } from '../types/category'
@@ -49,7 +61,7 @@ const EditBookPage = () => {
     void loadBook()
   }, [id])
 
-  const handleChange = (field: keyof BookPayload) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (field: keyof BookPayload) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value
     setForm((prev) => ({
       ...prev,
@@ -57,7 +69,7 @@ const EditBookPage = () => {
     }))
   }
 
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) {
       return
@@ -73,7 +85,7 @@ const EditBookPage = () => {
     reader.readAsDataURL(file)
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')
 
@@ -108,101 +120,93 @@ const EditBookPage = () => {
   }, [])
 
   return (
-    <div className="flex-center mt-6">
-      <div className="paper" style={{ width: '100%', maxWidth: 600 }}>
-        <h1>עדכון ספר</h1>
+    <Container maxWidth="sm" sx={{ py: 4 }}>
+      <Card sx={{ p: 3, borderRadius: 4, boxShadow: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          עדכון ספר
+        </Typography>
+
         {loading ? (
-          <div className="spinner"></div>
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <CircularProgress />
+          </Box>
         ) : (
-          <form onSubmit={handleSubmit} className="form">
-            <div className="form-group">
-              <label htmlFor="title">כותרת</label>
-              <input
-                id="title"
-                value={form.title}
-                onChange={handleChange('title')}
-                required
+          <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2 }}>
+            <TextField
+              label="כותרת"
+              value={form.title}
+              onChange={handleChange('title')}
+              required
+              fullWidth
+            />
+            <TextField
+              label="מחבר"
+              value={form.author}
+              onChange={handleChange('author')}
+              required
+              fullWidth
+            />
+            <TextField
+              label="תיאור"
+              value={form.description}
+              onChange={handleChange('description')}
+              multiline
+              rows={4}
+              fullWidth
+            />
+            <TextField
+              label="שנת פרסום"
+              type="number"
+              value={form.publishedYear ?? ''}
+              onChange={handleChange('publishedYear')}
+              fullWidth
+            />
+            <TextField
+              label="קישור תמונה"
+              value={form.imageUrl?.startsWith('data:') ? selectedImageName : form.imageUrl ?? ''}
+              onChange={handleChange('imageUrl')}
+              placeholder="הזן URL תמונה או בחר קובץ מהמחשב"
+              fullWidth
+            />
+            <Button variant="outlined" onClick={openFilePicker} sx={{ width: 'fit-content' }}>
+              העלה מהמחשב
+            </Button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileSelect}
+            />
+            {form.imageUrl && (
+              <Box
+                component="img"
+                src={form.imageUrl}
+                alt="תצוגת תמונה"
+                sx={{ width: '100%', borderRadius: 2, maxHeight: 320, objectFit: 'cover' }}
               />
-            </div>
-            <div className="form-group">
-              <label htmlFor="author">מחבר</label>
-              <input
-                id="author"
-                value={form.author}
-                onChange={handleChange('author')}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="description">תיאור</label>
-              <textarea
-                id="description"
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="publishedYear">שנת פרסום</label>
-              <input
-                id="publishedYear"
-                type="number"
-                value={form.publishedYear ?? ''}
-                onChange={handleChange('publishedYear')}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="imageUrl">קישור תמונה</label>
-              <div className="flex gap-2">
-                <input
-                  id="imageUrl"
-                  value={form.imageUrl?.startsWith('data:') ? selectedImageName : form.imageUrl ?? ''}
-                  onChange={handleChange('imageUrl')}
-                  placeholder="הזן URL תמונה או בחר קובץ מהמחשב"
-                  style={{ flex: 1 }}
-                />
-                <button type="button" className="button outlined" onClick={openFilePicker}>
-                  העלה מהמחשב
-                </button>
-              </div>
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                onChange={handleFileSelect}
-              />
-              {form.imageUrl && (
-                <img src={form.imageUrl} alt="תצוגת תמונה" className="preview-image" />
-              )}
-            </div>
-            <div className="form-group">
-              <label htmlFor="category">קטגוריה</label>
-              <input
-                id="category"
-                list="category-list"
-                value={form.category}
-                placeholder="בחר קטגוריה או הזן קטגוריה חדשה"
-                onChange={handleChange('category')}
-                required
-              />
-              <datalist id="category-list">
-                {categories.map((category) => (
-                  <option key={category._id} value={category.name} />
-                ))}
-              </datalist>
-            </div>
-            <button type="submit">
-              Save Changes
-            </button>
-          </form>
+            )}
+            <Autocomplete
+              freeSolo
+              options={categories.map((category) => category.name)}
+              inputValue={form.category}
+              onInputChange={(_, value) => setForm((prev) => ({ ...prev, category: value }))}
+              renderInput={(params) => <TextField {...params} label="קטגוריה" required fullWidth />}
+            />
+            <Stack direction="row" spacing={2} flexWrap="wrap">
+              <Button type="submit" variant="contained">
+                Save Changes
+              </Button>
+              <Button type="button" onClick={() => navigate('/admin/books')}>
+                Cancel
+              </Button>
+            </Stack>
+          </Box>
         )}
-        {error && (
-          <div className="alert alert-error mt-2">
-            {error}
-          </div>
-        )}
-      </div>
-    </div>
+
+        {error && <Alert severity="error">{error}</Alert>}
+      </Card>
+    </Container>
   )
 }
 
