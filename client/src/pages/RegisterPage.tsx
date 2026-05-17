@@ -1,3 +1,4 @@
+// דף הרשמה למשתמש חדש, יוצר חשבון דרך ה־API ומוביל ללוגין
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
@@ -11,6 +12,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
+  // שולח את פרטי ההרשמה לשרת, ועובר לדף הלוגין אם ההרשמה הצליחה
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')

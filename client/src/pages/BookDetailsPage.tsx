@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from 'react'
+﻿// דף פרטי ספר שבו ניתן לראות מידע על הספר ולהשאיל אותו
+import { useEffect, useState } from 'react'
 import { isAxiosError } from 'axios'
 import { useParams } from 'react-router-dom'
 import {
@@ -27,6 +28,7 @@ const BookDetailsPage = () => {
   const [error, setError] = useState('')
   const [borrowMessage, setBorrowMessage] = useState('')
 
+  // טוען את פרטי הספר לפי ה־id שמתקבל מהנתיב
   useEffect(() => {
     const loadBook = async () => {
       if (!id) {
@@ -48,6 +50,7 @@ const BookDetailsPage = () => {
     void loadBook()
   }, [id])
 
+  // מבצע השאלה של הספר דרך ה־API ומציג הודעה מתאימה
   const handleBorrow = async () => {
     if (!user || !book) {
       setBorrowMessage('צריך להתחבר כדי להשאיל ספר')

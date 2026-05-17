@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from 'react'
+﻿// דף ספרים שבו אפשר לסנן לפי קטגוריה ולראות כרטיס לכל ספר
+import { useEffect, useState } from 'react'
 import { Box, CircularProgress, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography, Alert } from '@mui/material'
 import type { SelectChangeEvent } from '@mui/material'
 import { getBooks } from '../api/booksApi'
@@ -14,6 +15,7 @@ const BooksPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  // טוען ספרים וקטגוריות מתוך ה־API, ומסנן קטגוריות שלא שייכות לספרים הטעונים
   useEffect(() => {
     const loadAll = async () => {
       setLoading(true)

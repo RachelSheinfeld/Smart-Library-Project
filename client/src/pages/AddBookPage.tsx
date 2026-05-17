@@ -1,3 +1,5 @@
+// דף להוספת ספר חדש על ידי המנהל
+// משתמש ב־React hooks לניהול טופס, טעינה ומעבר בין דפים
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Autocomplete, Box, Button, Card, Container, Stack, TextField, Typography, Alert } from '@mui/material'
@@ -20,6 +22,7 @@ const AddBookPage = () => {
   const [selectedImageName, setSelectedImageName] = useState('')
   const [categories, setCategories] = useState<Category[]>([])
 
+  // מנהל שינויים בכל אחד מהשדות בטופס
   const handleChange = (field: keyof BookPayload) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = event.target.value
     setForm((prev) => ({
@@ -28,6 +31,7 @@ const AddBookPage = () => {
     }))
   }
 
+  // טוען תמונה מקובץ וממיר אותה ל־Base64 כדי לשמור ב־form
   const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) {
@@ -44,6 +48,7 @@ const AddBookPage = () => {
     reader.readAsDataURL(file)
   }
 
+  // שומר את הספר החדש דרך ה־API ומעביר למסך הספרים בממשק הניהול
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError('')

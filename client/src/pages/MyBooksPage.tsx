@@ -1,3 +1,4 @@
+// דף הספרים שלי למשתמש רגיל, מציג את הספרים שהשאלתי ומאפשר החזרה
 import { useEffect, useState } from 'react'
 import {
   Alert,
@@ -26,6 +27,7 @@ const MyBooksPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  // בונה רשימת השאלות שמסתיימות בתוך שבוע
   const findSoonBorrows = (borrowsList: Borrow[]) => {
     const now = new Date().getTime()
     const weekFromNow = now + 7 * 24 * 60 * 60 * 1000
@@ -35,6 +37,7 @@ const MyBooksPage = () => {
     })
   }
 
+  // טוען את כל ההשאלות של המשתמש ונבדק אם צריך להציג התראה
   const loadBorrows = async () => {
     if (!user) {
       setBorrows([])
@@ -57,10 +60,12 @@ const MyBooksPage = () => {
     }
   }
 
+  // טוען את ההשאלות כאשר המשתמש משתנה
   useEffect(() => {
     void loadBorrows()
   }, [user])
 
+  // מחזיר ספר שנבחר ודרש טעינת הנתונים מחדש
   const handleReturn = async (borrowId: string) => {
     try {
       await returnBook(borrowId)

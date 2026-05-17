@@ -1,3 +1,4 @@
+// דף התחברות של המנהל, משתמש ב־API של auth כדי לקבל טוקן
 import { useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +13,7 @@ const AdminLoginPage = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
+  // שולח את פרטי מנהל למערכת ומעדכן את ה־AuthContext במקרה של הצלחה
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
     setError('')

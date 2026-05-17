@@ -1,3 +1,4 @@
+// דף הבית של האפליקציה, מציג קישורים לפי סוג המשתמש
 import { Link as RouterLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
@@ -6,6 +7,7 @@ import Logo from '../components/Logo'
 const HomePage = () => {
   const { user } = useAuth()
 
+  // דף הבית מציג כפתורים שונים לפי סטטוס המשתמש והרשאותיו
   return (
     <Box sx={{ py: 8, minHeight: 'calc(100vh - 84px)', background: 'linear-gradient(180deg, rgba(26,104,109,0.08) 0%, rgba(255,255,255,1) 100%)' }}>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>

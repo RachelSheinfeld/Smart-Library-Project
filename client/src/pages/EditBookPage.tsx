@@ -1,3 +1,4 @@
+// דף עריכת ספר קיים, עם טעינת הפרטים של הספר ל־form
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -33,6 +34,7 @@ const EditBookPage = () => {
   const [selectedImageName, setSelectedImageName] = useState('')
   const [categories, setCategories] = useState<Category[]>([])
 
+  // טוען את נתוני הספר מה־API כדי למלא את הטופס בעריכה
   useEffect(() => {
     const loadBook = async () => {
       if (!id) {
@@ -106,6 +108,7 @@ const EditBookPage = () => {
     fileInputRef.current?.click()
   }
 
+  // טוען קטגוריות קיימות כדי לאפשר בחירה בטופס
   useEffect(() => {
     const loadCategories = async () => {
       try {

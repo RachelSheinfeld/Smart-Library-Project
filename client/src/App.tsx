@@ -11,7 +11,6 @@ import MyBooksPage from './pages/MyBooksPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminBooksPage from './pages/AdminBooksPage'
 import AdminBorrowsPage from './pages/AdminBorrowsPage'
-import CategoriesPage from './pages/CategoriesPage'
 import AddBookPage from './pages/AddBookPage'
 import EditBookPage from './pages/EditBookPage'
 import Navbar from './components/Navbar'
@@ -30,7 +29,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/books" element={<BooksPage />} />
                 <Route path="/books/:id" element={<BookDetailsPage />} />
-                <Route path="/categories" element={<CategoriesPage />} />
+                {/* Categories page removed per admin request */}
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/admin/login" element={<AdminLoginPage />} />

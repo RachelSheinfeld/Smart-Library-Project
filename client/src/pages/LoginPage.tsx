@@ -1,3 +1,4 @@
+// דף התחברות רגיל למשתמשים רגילים, קובע את ההתחברות דרך ההקשר
 import { useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
@@ -15,6 +16,7 @@ const LoginPage = () => {
   const [error, setError] = useState('')
 
   
+  // ניהול הטופס של התחברות, קריאה ל־API ועדכון שגיאה במידת הצורך
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
     setError('')

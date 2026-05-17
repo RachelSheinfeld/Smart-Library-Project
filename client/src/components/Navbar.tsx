@@ -26,9 +26,6 @@ const Navbar = () => {
           <Button component={RouterLink} to="/books" variant="contained" color="secondary">
             Books
           </Button>
-          <Button component={RouterLink} to="/categories" variant="outlined" color="inherit">
-            Categories
-          </Button>
           {user?.role === 'admin' ? (
             <>
               <Button component={RouterLink} to="/admin/books" variant="outlined" color="inherit">
@@ -50,7 +47,16 @@ const Navbar = () => {
                 Logout
               </Button>
             </>
-          ) : null}
+          ) : (
+            <>
+              <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
+                Login
+              </Button>
+              <Button component={RouterLink} to="/register" variant="outlined" color="inherit">
+                Register
+              </Button>
+            </>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
