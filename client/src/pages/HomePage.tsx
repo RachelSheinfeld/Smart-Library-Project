@@ -1,11 +1,12 @@
 // דף הבית של האפליקציה, מציג קישורים לפי סוג המשתמש
 import { Link as RouterLink } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAppSelector } from '../store/hooks'
+import type { RootState } from '../store/store'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import Logo from '../components/Logo'
 
 const HomePage = () => {
-  const { user } = useAuth()
+  const user = useAppSelector((state: RootState) => state.auth.user)
 
   // דף הבית מציג כפתורים שונים לפי סטטוס המשתמש והרשאותיו
   return (

@@ -14,17 +14,15 @@ import AdminBorrowsPage from './pages/AdminBorrowsPage'
 import AddBookPage from './pages/AddBookPage'
 import EditBookPage from './pages/EditBookPage'
 import Navbar from './components/Navbar'
-import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <BrowserRouter>
-          <Navbar />
-          <Box component="main" sx={{ py: 4, minHeight: 'calc(100vh - 84px)', bgcolor: 'background.default' }}>
-            <Container maxWidth="lg">
+      <BrowserRouter>
+        <Navbar />
+        <Box component="main" sx={{ py: 4, minHeight: 'calc(100vh - 84px)', bgcolor: 'background.default' }}>
+          <Container maxWidth="lg">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/books" element={<BooksPage />} />
@@ -42,7 +40,6 @@ function App() {
             </Container>
           </Box>
         </BrowserRouter>
-      </AuthProvider>
     </ThemeProvider>
   )
 }

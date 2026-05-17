@@ -3,14 +3,13 @@ import { useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { login } from '../api/authApi'
-import { useAuth } from '../context/AuthContext'
+import { setAuth } from '../store/authSlice'
+import { useAppDispatch } from '../store/hooks'
 import { Box, Button, Container, Paper, TextField, Typography, Alert, Link } from '@mui/material'
 
 const LoginPage = () => {
-  // שימוש ב-useNavigate כדי לנווט לדף הבית
   const navigate = useNavigate()
-  // שימוש ב-useAuth כדי להגדיר את המשתמש והטוקן
-  const { setAuth } = useAuth()
+  const dispatch = useAppDispatch()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -29,7 +28,7 @@ const LoginPage = () => {
         return
       }
       //הגדרת המשתמש והטוקן
-      setAuth(response.user, response.token)
+      dispatch(setAuth({ user: response.user, token: response.token }))
       navigate('/')
     } catch {
       //הודעת שגיאה

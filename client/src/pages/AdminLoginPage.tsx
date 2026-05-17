@@ -3,12 +3,13 @@ import { useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../api/authApi'
-import { useAuth } from '../context/AuthContext'
+import { setAuth } from '../store/authSlice'
+import { useAppDispatch } from '../store/hooks'
 import { Box, Button, Container, Paper, TextField, Typography, Alert } from '@mui/material'
 
 const AdminLoginPage = () => {
   const navigate = useNavigate()
-  const { setAuth } = useAuth()
+  const dispatch = useAppDispatch()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -25,7 +26,7 @@ const AdminLoginPage = () => {
         return
       }
 
-      setAuth(response.user, response.token)
+      dispatch(setAuth({ user: response.user, token: response.token }))
       navigate('/admin/books')
     } catch {
       setError('Admin login failed. Check the admin credentials.')

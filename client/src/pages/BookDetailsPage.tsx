@@ -17,12 +17,13 @@ import {
 } from '@mui/material'
 import { getBookById } from '../api/booksApi'
 import { borrowBook } from '../api/borrowApi'
-import { useAuth } from '../context/AuthContext'
+import { useAppSelector } from '../store/hooks'
+import type { RootState } from '../store/store'
 import type { Book } from '../types/book'
 
 const BookDetailsPage = () => {
   const { id } = useParams()
-  const { user } = useAuth()
+  const user = useAppSelector((state: RootState) => state.auth.user)
   const [book, setBook] = useState<Book | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

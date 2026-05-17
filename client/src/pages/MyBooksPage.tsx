@@ -16,11 +16,11 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { getUserBorrows, returnBook } from '../api/borrowApi'
-import { useAuth } from '../context/AuthContext'
+import { useAppSelector } from '../store/hooks'
 import type { Borrow } from '../types/borrow'
 
 const MyBooksPage = () => {
-  const { user } = useAuth()
+  const user = useAppSelector((state) => state.auth.user)
   const [borrows, setBorrows] = useState<Borrow[]>([])
   const [soonBorrows, setSoonBorrows] = useState<Borrow[]>([])
   const [showPopup, setShowPopup] = useState(false)

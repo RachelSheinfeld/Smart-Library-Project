@@ -1,14 +1,16 @@
 import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { logout } from '../store/authSlice'
 import Logo from './Logo'
 
 const Navbar = () => {
-  const { user, logout } = useAuth()
+  const user = useAppSelector((state) => state.auth.user)
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    logout()
+    dispatch(logout())
     navigate('/')
   }
 
