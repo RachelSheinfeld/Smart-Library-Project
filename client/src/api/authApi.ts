@@ -13,11 +13,20 @@ export interface RegisterPayload {
 }
 
 export const login = async (payload: LoginPayload) => {
-  const { data } = await apiClient.post<AuthResponse>('/auth/login', payload)
+
+// שולח את פרטי ההתחברות לשרת,
+// מחכה לתשובה,
+// ומחלץ מתוך תגובת Axios את ה־data
+// שמכיל את הטוקן ופרטי המשתמש 
+ const { data } = await apiClient.post<AuthResponse>('/auth/login', payload)
   return data
 }
 
 export const register = async (payload: RegisterPayload) => {
-  const { data } = await apiClient.post<AuthResponse>('/auth/register', payload)
+// שולח את פרטי ההתחברות לשרת,
+// מחכה לתשובה,
+// ומחלץ מתוך תגובת Axios את ה־data
+// שמכיל את הטוקן ופרטי המשתמש 
+ const { data } = await apiClient.post<AuthResponse>('/auth/register', payload)
   return data
 }
