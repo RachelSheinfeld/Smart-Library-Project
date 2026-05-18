@@ -56,7 +56,7 @@ const BookDetailsPage = () => {
   // את תאריך ההחזרה מגדירים כאן ב־14 ימים מהיום
   const handleBorrow = async () => {
     if (!user || !book) {
-      setBorrowMessage('צריך להתחבר כדי להשאיל ספר')
+      setBorrowMessage('Please log in to borrow a book')
       return
     }
 

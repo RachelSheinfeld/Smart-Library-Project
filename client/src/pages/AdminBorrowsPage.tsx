@@ -86,7 +86,7 @@ const AdminBorrowsPage = () => {
             <Typography variant="h4" component="h1">
              The Borrows Page
             </Typography>
-            <Typography color="text.secondary">רשימת ההאלות שהוקצו ללקוחות ולא הוחזרו עדיין.</Typography>
+            <Typography color="text.secondary">The list of all active borrows.</Typography>
           </Box>
         </Stack>
       </Paper>
@@ -96,7 +96,7 @@ const AdminBorrowsPage = () => {
         <Paper elevation={1} sx={{ p: 4, textAlign: 'center' }}>
           {/* CircularProgress הוא הספינר של MUI שמראה טעינה */}
           <CircularProgress />
-          <Typography sx={{ mt: 2 }}>טוען השאלות...</Typography>
+          <Typography sx={{ mt: 2 }}> Loading borrows...</Typography>
         </Paper>
       )}
 
