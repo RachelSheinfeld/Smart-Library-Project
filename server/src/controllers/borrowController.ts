@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import Borrow from "../models/Borrow";
+
+// Controller של השאלות - מנהל את כל הפעולות בהשאלה והחזרה של ספרים
+// כולל בדיקת זמינות, יצירת השאלה וחיפוש השאלות פעולות
+// עם population של ספרים ומשתמשים.
 // פונקציה לקבלת כל ההשאלות, כולל פרטי הספר והמשתמש, מהמסד נתונים
 export const getAllBorrows = async (req: Request, res: Response) => {
   try {

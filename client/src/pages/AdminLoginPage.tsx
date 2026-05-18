@@ -1,4 +1,4 @@
-// דף התחברות של המנהל, משתמש ב־API של auth כדי לקבל טוקן
+// דף התחברות של המנהל, משתמש ב־API של auth כדי לקבל טוקן ולשמור אותו ב־Redux
 import { useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -37,12 +37,12 @@ const AdminLoginPage = () => {
     <Container maxWidth="sm" sx={{ py: 8 }}>
       <Paper sx={{ p: 4, borderRadius: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          מנהל מערכת
+          Admin Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2, mt: 2 }}>
           <TextField
             fullWidth
-            label="שם משתמש"
+            label="Username"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
@@ -56,7 +56,7 @@ const AdminLoginPage = () => {
             required
           />
           <Button type="submit" variant="contained" size="large">
-            התחבר כמנהל
+            Login as Admin
           </Button>
         </Box>
         {error ? (

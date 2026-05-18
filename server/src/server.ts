@@ -1,12 +1,12 @@
 
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 import app from "./app";
 import { connectDB } from "./config/db";
 
 const PORT = process.env.PORT || 5000;
-// פונקציה לאתחול השרת, כולל חיבור למסד הנתונים והאזנה לפורט
+// נקודת הכניסה של השרת: עושים חיבור למסד נתונים ולאחר מכן מאזינים על פורט
 const startServer = async () => {
   await connectDB();
 

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import Book from "../models/Book";
 import Category from "../models/Category";
 
+// פונקציה שעוזרת לקבוע האם הקטגוריה היא מזהה MongoDB קיים או שם חדש
 const resolveCategoryId = async (categoryInput: unknown) => {
   const categoryValue = String(categoryInput || '').trim();
   if (!categoryValue) {

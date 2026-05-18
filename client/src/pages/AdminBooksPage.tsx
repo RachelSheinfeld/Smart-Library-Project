@@ -13,7 +13,6 @@ import {
   CardMedia,
   Container,
   Grid,
-  Stack,
   Typography,
   CircularProgress,
   Alert,
@@ -66,19 +65,13 @@ const AdminBooksPage = () => {
   return (
     // Container מספק שוליים ויישור כללי לדף
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* קופסה עליונה עם כותרת וכפתורי ניווט */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 3 }}>
-        <Typography variant="h4">Admin Books Page</Typography>
-        <Stack direction="row" spacing={1}>
-          {/* כפתור שיוביל לדף יצירת ספר חדש */}
-          <Button component={RouterLink} to="/admin/books/new" variant="contained">
-            Add Book
-          </Button>
-          {/* כפתור שמוביל לעמוד ההשאלות של המנהל */}
-          <Button component={RouterLink} to="/admin/borrows" variant="outlined">
-            View Borrows
-          </Button>
-        </Stack>
+        <Typography variant="h4">All Books</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+        <Button component={RouterLink} to="/admin/books/new" variant="contained">
+          Add Book
+        </Button>
       </Box>
 
       {/* ספינר טעינה בזמן שמודדים את השרת */}

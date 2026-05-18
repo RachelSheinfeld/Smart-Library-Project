@@ -30,9 +30,7 @@ const HomePage = () => {
               <Typography variant="h3" component="h1" gutterBottom>
                 Welcome to Smart Library
               </Typography>
-              <Typography variant="h6" color="text.secondary">
-                הספרייה החכמה שלך לניהול ספרים, קטגוריות וההשאלות עם חוויית משתמש מודרנית.
-              </Typography>
+            
               {user ? (
                 <Typography variant="subtitle1" sx={{ mt: 1, fontWeight: 700 }}>
                   WELCOME {user.role === 'admin' ? 'ADMIN' : user.name.toUpperCase()}

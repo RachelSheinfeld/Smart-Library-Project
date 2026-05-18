@@ -1,10 +1,12 @@
 import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { logout } from '../store/authSlice'
 import Logo from './Logo'
 
 const Navbar = () => {
+  const location = useLocation()
+  const isAdminRoute = location.pathname.startsWith('/admin')
   const user = useAppSelector((state) => state.auth.user)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -25,38 +27,54 @@ const Navbar = () => {
         </Box>
 
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          <Button component={RouterLink} to="/books" variant="contained" color="secondary">
-            Books
-          </Button>
-          {user?.role === 'admin' ? (
+          {isAdminRoute && user?.role === 'admin' ? (
             <>
-              <Button component={RouterLink} to="/admin/books" variant="outlined" color="inherit">
-                Admin Books
+              <Button component={RouterLink} to="/admin/books" variant="contained" color="secondary">
+                All Books
               </Button>
               <Button component={RouterLink} to="/admin/borrows" variant="outlined" color="inherit">
                 All Borrows
               </Button>
-              <Button onClick={handleLogout} variant="outlined" color="inherit">
-                Logout
-              </Button>
-            </>
-          ) : user ? (
-            <>
-              <Button component={RouterLink} to="/my-books" variant="outlined" color="inherit">
-                My Books
-              </Button>
-              <Button onClick={handleLogout} variant="outlined" color="inherit">
+              <Button onClick={handleLogout} variant="contained" color="error">
                 Logout
               </Button>
             </>
           ) : (
             <>
-              <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
-                Login
+              <Button component={RouterLink} to="/books" variant="contained" color="secondary">
+                Books
               </Button>
-              <Button component={RouterLink} to="/register" variant="outlined" color="inherit">
-                Register
-              </Button>
+              {user?.role === 'admin' ? (
+                <>
+                  <Button component={RouterLink} to="/admin/books" variant="outlined" color="inherit">
+                    Admin Books
+                  </Button>
+                  <Button component={RouterLink} to="/admin/borrows" variant="outlined" color="inherit">
+                    All Borrows
+                  </Button>
+                  <Button onClick={handleLogout} variant="outlined" color="inherit">
+                    Logout
+                  </Button>
+                </>
+              ) : user ? (
+                <>
+                  <Button component={RouterLink} to="/my-books" variant="outlined" color="inherit">
+                    My Books
+                  </Button>
+                  <Button onClick={handleLogout} variant="outlined" color="inherit">
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button component={RouterLink} to="/login" variant="outlined" color="inherit">
+                    Login
+                  </Button>
+                  <Button component={RouterLink} to="/register" variant="outlined" color="inherit">
+                    Register
+                  </Button>
+                </>
+              )}
             </>
           )}
         </Box>

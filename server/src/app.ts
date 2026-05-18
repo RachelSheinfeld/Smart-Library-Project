@@ -1,3 +1,5 @@
+// קובץ ההגדרה הראשי של השרת בצד השרת
+// מגדיר middleware של Express ונתיבי API ליישום
 import express from "express";
 import dotenv from "dotenv";
 
@@ -16,5 +18,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/borrow", borrowRoutes);
+
+// כל בקשה לכתובות אלה מועברת לנתיבים המתאימים
 
 export default app;

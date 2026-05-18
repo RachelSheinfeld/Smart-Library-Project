@@ -82,25 +82,25 @@ const AddBookPage = () => {
     <Container maxWidth="sm" sx={{ py: 4 }}>
       <Card sx={{ p: 3, borderRadius: 4, boxShadow: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          הוספת ספר חדש
+         Add New Book
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2 }}>
           <TextField
-            label="כותרת"
+            label="Title"
             value={form.title}
             onChange={handleChange('title')}
             required
             fullWidth
           />
           <TextField
-            label="מחבר"
+            label="Author"
             value={form.author}
             onChange={handleChange('author')}
             required
             fullWidth
           />
           <TextField
-            label="תיאור"
+            label="Description"
             value={form.description}
             onChange={handleChange('description')}
             multiline
@@ -108,21 +108,21 @@ const AddBookPage = () => {
             fullWidth
           />
           <TextField
-            label="שנת פרסום"
+            label="Published Year"
             type="number"
             value={form.publishedYear ?? ''}
             onChange={handleChange('publishedYear')}
             fullWidth
           />
           <TextField
-            label="קישור תמונה"
+            label="Image URL"
             value={form.imageUrl?.startsWith('data:') ? selectedImageName : form.imageUrl ?? ''}
             onChange={handleChange('imageUrl')}
-            placeholder="הזן URL תמונה או בחר קובץ מהמחשב"
+            placeholder="Enter image URL or select file from computer"
             fullWidth
           />
           <Button variant="outlined" onClick={openFilePicker} sx={{ width: 'fit-content' }}>
-            העלה מהמחשב
+            Upload from Computer
           </Button>
           <input
             type="file"
@@ -145,7 +145,7 @@ const AddBookPage = () => {
             inputValue={form.category}
             onInputChange={(_, value) => setForm((prev) => ({ ...prev, category: value }))}
             renderInput={(params) => (
-              <TextField {...params} label="קטגוריה" required fullWidth />
+              <TextField {...params} label="Category" required fullWidth />
             )}
           />
           <Stack direction="row" spacing={2} flexWrap="wrap">

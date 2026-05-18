@@ -6,4 +6,5 @@ export interface Book {
   publishedYear?: number
   imageUrl?: string
   category: string | { _id: string; name?: string }
+  isAvailable?: boolean
 }

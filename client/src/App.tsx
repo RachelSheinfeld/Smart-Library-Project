@@ -1,4 +1,5 @@
 
+// הקובץ הראשי של היישום - מגדיר את הטמעה, נושא העיצוב והנתיבים של React Router
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ThemeProvider, CssBaseline, Container, Box } from '@mui/material'
 import theme from './theme'
@@ -27,7 +28,6 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/books" element={<BooksPage />} />
                 <Route path="/books/:id" element={<BookDetailsPage />} />
-                {/* Categories page removed per admin request */}
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/admin/login" element={<AdminLoginPage />} />

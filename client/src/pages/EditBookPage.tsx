@@ -126,7 +126,7 @@ const EditBookPage = () => {
     <Container maxWidth="sm" sx={{ py: 4 }}>
       <Card sx={{ p: 3, borderRadius: 4, boxShadow: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          עדכון ספר
+          Edit Book
         </Typography>
 
         {loading ? (
@@ -136,21 +136,21 @@ const EditBookPage = () => {
         ) : (
           <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2 }}>
             <TextField
-              label="כותרת"
+              label="Title"
               value={form.title}
               onChange={handleChange('title')}
               required
               fullWidth
             />
             <TextField
-              label="מחבר"
+              label="Author"
               value={form.author}
               onChange={handleChange('author')}
               required
               fullWidth
             />
             <TextField
-              label="תיאור"
+              label="Description"
               value={form.description}
               onChange={handleChange('description')}
               multiline
@@ -158,21 +158,21 @@ const EditBookPage = () => {
               fullWidth
             />
             <TextField
-              label="שנת פרסום"
+              label="Published Year"
               type="number"
               value={form.publishedYear ?? ''}
               onChange={handleChange('publishedYear')}
               fullWidth
             />
             <TextField
-              label="קישור תמונה"
+              label="Image URL"
               value={form.imageUrl?.startsWith('data:') ? selectedImageName : form.imageUrl ?? ''}
               onChange={handleChange('imageUrl')}
-              placeholder="הזן URL תמונה או בחר קובץ מהמחשב"
+              placeholder="Enter image URL or select a file from your computer"
               fullWidth
             />
             <Button variant="outlined" onClick={openFilePicker} sx={{ width: 'fit-content' }}>
-              העלה מהמחשב
+              Upload from Computer
             </Button>
             <input
               type="file"
@@ -185,7 +185,7 @@ const EditBookPage = () => {
               <Box
                 component="img"
                 src={form.imageUrl}
-                alt="תצוגת תמונה"
+                alt="Book Image Preview"
                 sx={{ width: '100%', borderRadius: 2, maxHeight: 320, objectFit: 'cover' }}
               />
             )}
@@ -194,7 +194,7 @@ const EditBookPage = () => {
               options={categories.map((category) => category.name)}
               inputValue={form.category}
               onInputChange={(_, value) => setForm((prev) => ({ ...prev, category: value }))}
-              renderInput={(params) => <TextField {...params} label="קטגוריה" required fullWidth />}
+              renderInput={(params) => <TextField {...params} label="Category" required fullWidth />}
             />
             <Stack direction="row" spacing={2} flexWrap="wrap">
               <Button type="submit" variant="contained">

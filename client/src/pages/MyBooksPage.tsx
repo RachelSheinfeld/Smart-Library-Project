@@ -20,6 +20,7 @@ import { useAppSelector } from '../store/hooks'
 import type { Borrow } from '../types/borrow'
 
 const MyBooksPage = () => {
+  // דף הספרים של המשתמש - מציג ספרים מושאלים והתראת החזרה קרובה
   const user = useAppSelector((state) => state.auth.user)
   const [borrows, setBorrows] = useState<Borrow[]>([])
   const [soonBorrows, setSoonBorrows] = useState<Borrow[]>([])
@@ -28,6 +29,7 @@ const MyBooksPage = () => {
   const [error, setError] = useState('')
 
   // בונה רשימת השאלות שמסתיימות בתוך שבוע
+  // כאן אפשר לשנות את הערך כדי להקפיץ הודעה מוקדם יותר או מאוחר יותר
   const findSoonBorrows = (borrowsList: Borrow[]) => {
     const now = new Date().getTime()
     const weekFromNow = now + 7 * 24 * 60 * 60 * 1000
@@ -78,24 +80,24 @@ const MyBooksPage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Dialog open={showPopup} onClose={() => setShowPopup(false)}>
-        <DialogTitle>התראה: החזרה מתקרבת</DialogTitle>
+        <DialogTitle>Reminder: Return Due Soon</DialogTitle>
         <DialogContent>
           <Typography>
-            יש {soonBorrows.length} ספר{soonBorrows.length === 1 ? '' : 'ים'} שיש להחזיר בתוך שבוע.
+            You have {soonBorrows.length} book{soonBorrows.length === 1 ? '' : 's'} due soon. Please make sure to return it on time to avoid late fees.
           </Typography>
           <Box component="ul" sx={{ pl: 3, mt: 2 }}>
             {soonBorrows.map((borrow) => {
               const book = typeof borrow.book === 'string' ? null : borrow.book
               return (
                 <li key={borrow._id}>
-                  {book ? book.title : 'ספר'} - תאריך החזרה: {new Date(borrow.dueDate).toLocaleDateString('he-IL')}
+                  {book ? book.title : 'Book'} - Return date: {new Date(borrow.dueDate).toLocaleDateString('en-US')}
                 </li>
               )
             })}
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowPopup(false)}>סגור</Button>
+          <Button onClick={() => setShowPopup(false)}>Close</Button>
         </DialogActions>
       </Dialog>
 
@@ -103,14 +105,14 @@ const MyBooksPage = () => {
         My Books Page
       </Typography>
 
-      {!user && <Alert severity="info">צריך להתחבר כדי לראות את הספרים שלך.</Alert>}
+      {!user && <Alert severity="info">You need to be logged in to see your books.</Alert>}
       {loading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
           <CircularProgress />
         </Box>
       )}
       {error && <Alert severity="error">{error}</Alert>}
-      {!loading && user && borrows.length === 0 && <Alert severity="info">אין השאלות כרגע.</Alert>}
+      {!loading && user && borrows.length === 0 && <Alert severity="info">You have no borrowed books at the moment.</Alert>}
 
       {!loading && borrows.length > 0 && (
         <Grid container spacing={3} sx={{ mt: 2 }}>

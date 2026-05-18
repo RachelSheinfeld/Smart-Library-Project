@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import { getAllBorrows, returnBook } from '../api/borrowApi'
 import type { Borrow } from '../types/borrow'
 import {
@@ -78,23 +77,17 @@ const AdminBorrowsPage = () => {
     // Container נותן ריווח סביב כל העמוד
     // maxWidth=lg קובע רוחב מקסימלי טוב למסכים רחבים
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* כותרת עליונה עם הסבר וכפתור חזרה */}
+      {/* כותרת עליונה עם הסבר */}
       {/* Paper נותן רקע לבן עם צל קטן כדי להבליט את הכותרת */}
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
         {/* Stack מסדר את התוכן בשורה או בעמודה לפי רוחב המסך */}
         <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems="center" spacing={2}>
           <Box>
-            {/* Typography עם variant=h4 זו כותרת גדולה של MUI */}
             <Typography variant="h4" component="h1">
-              השאלות הפעילות כרגע
+             The Borrows Page
             </Typography>
             <Typography color="text.secondary">רשימת ההאלות שהוקצו ללקוחות ולא הוחזרו עדיין.</Typography>
           </Box>
-          {/* כפתור קישור חזרה לעמוד הספרים של המנהל */}
-          {/* RouterLink זה קישור פנימי של React Router שמונע טעינה מחדש של הדף */}
-          <Button component={RouterLink} to="/admin/books" variant="contained">
-            חזרה לספרים של המנהל
-          </Button>
         </Stack>
       </Paper>
 
@@ -113,7 +106,7 @@ const AdminBorrowsPage = () => {
       {/* אם אין שאלות פעילות, מציגים הודעת מידע */}
       {!loading && !error && visibleBorrows.length === 0 && (
         <Alert severity="info" sx={{ mb: 3 }}>
-          אין השאלות הפעילות להצגה כרגע.
+        No active borrows found. All books have been returned or no borrows exist.
         </Alert>
       )}
 
@@ -122,12 +115,12 @@ const AdminBorrowsPage = () => {
       <Grid container spacing={3}>
         {visibleBorrows.map((borrow) => {
           // אם borrow.book הוא מחרוזת, זה מזהה בלבד.
-          // אם הוא אובייקט, נתן להציג את השם.
+          // אם הוא אובייקט, נתן להציג את הכותרת.
           const bookTitle = typeof borrow.book === 'string'
             ? borrow.book
-            : borrow.book.title || 'שם הספר לא זמין'
+            : borrow.book?.title || 'שם הספר לא זמין'
 
-          const userEmail = typeof borrow.user === 'string' ? borrow.user : borrow.user.email
+          const userEmail = typeof borrow.user === 'string' ? borrow.user : borrow.user?.email || 'לקוח לא ידוע'
 
           return (
             <Grid item xs={12} md={6} key={borrow._id}>

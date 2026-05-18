@@ -22,6 +22,7 @@ import type { RootState } from '../store/store'
 import type { Book } from '../types/book'
 
 const BookDetailsPage = () => {
+  // דף פרטי ספר - טוען את פרטי הספר לפי מזהה מה-url
   const { id } = useParams()
   const user = useAppSelector((state: RootState) => state.auth.user)
   const [book, setBook] = useState<Book | null>(null)
@@ -52,6 +53,7 @@ const BookDetailsPage = () => {
   }, [id])
 
   // מבצע השאלה של הספר דרך ה־API ומציג הודעה מתאימה
+  // את תאריך ההחזרה מגדירים כאן ב־14 ימים מהיום
   const handleBorrow = async () => {
     if (!user || !book) {
       setBorrowMessage('צריך להתחבר כדי להשאיל ספר')
@@ -67,16 +69,16 @@ const BookDetailsPage = () => {
         book: book._id,
         dueDate: dueDate.toISOString(),
       })
-      setBorrowMessage('הספר הושאל בהצלחה')
+      setBorrowMessage('The book was borrowed successfully')
     } catch (err) {
       if (isAxiosError(err)) {
         const days = err.response?.data?.daysUntilAvailable
         if (typeof days === 'number') {
-          setBorrowMessage(`הספר לא זמין כרגע. ניתן להשאיל בעוד ${days} ימים.`)
+          setBorrowMessage(`The book is not available yet. It will be available in ${days} days.`)
           return
         }
       }
-      setBorrowMessage('לא ניתן להשאיל כרגע את הספר')
+      setBorrowMessage('Not able to borrow the book at the moment')
     }
   }
 
@@ -123,7 +125,7 @@ const BookDetailsPage = () => {
                 Borrow this book
               </Button>
               {borrowMessage && (
-                <Alert severity={borrowMessage.includes('הושאל') ? 'success' : 'warning'}>
+                <Alert severity={borrowMessage.includes('was borrowed') ? 'success' : 'warning'}>
                   {borrowMessage}
                 </Alert>
               )}

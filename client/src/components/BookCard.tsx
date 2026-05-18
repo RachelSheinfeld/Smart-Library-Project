@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
@@ -8,6 +9,8 @@ import Chip from '@mui/material/Chip'
 import Typography from '@mui/material/Typography'
 import type { Book } from '../types/book'
 
+// BookCard מציג כרטיס ספר ב־BooksPage
+// ומאפשר ניווט לדף פרטי הספר בלחיצה
 interface BookCardProps {
   book: Book
 }
@@ -15,7 +18,8 @@ interface BookCardProps {
 const placeholderImage = 'https://via.placeholder.com/600x360/1A686D/ffffff?text=Smart+Library'
 
 const BookCard = ({ book }: BookCardProps) => {
-  const { _id, title, author, description, publishedYear, imageUrl, category } = book
+  // אם התמונה לא נטענת, נציג תמונה אלטרנטיבית
+  const { _id, title, author, description, publishedYear, imageUrl, category, isAvailable = true } = book
   const [imageSrc, setImageSrc] = useState(imageUrl || placeholderImage)
   const categoryName = typeof category === 'string' ? category : category?.name ?? 'Unknown'
   const shortDescription = description ? `${description.slice(0, 120)}${description.length > 120 ? '...' : ''}` : 'No description available.'
@@ -36,9 +40,23 @@ const BookCard = ({ book }: BookCardProps) => {
           }}
         />
         <CardContent sx={{ flex: 1 }}>
-          <Typography variant="h6" component="h3" gutterBottom>
-            {title}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant="h6" component="h3">
+              {title}
+            </Typography>
+            <Box
+              component="span"
+              sx={{
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                bgcolor: isAvailable ? 'success.main' : 'error.main',
+                border: '1px solid',
+                borderColor: isAvailable ? 'success.dark' : 'error.dark',
+              }}
+              aria-label={isAvailable ? 'Available' : 'Not available'}
+            />
+          </Box>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             {author}
           </Typography>
